@@ -5,6 +5,7 @@ import time
 import hashlib
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime, timezone, timedelta
 
 USERNAME = os.getenv("USERNAME")
 PASSWORD = os.getenv("PASSWORD")
@@ -37,6 +38,11 @@ def get_session(_login_info):
 def get_historical_info(_session):
     response = session.get(get_info_url)
     return json.loads(response.text)["d"]
+
+
+def get_today_date():
+    _tz = timezone(+timedelta(hours=8))
+    return datetime.now(_tz).strftime("%Y%m%d")
 
 
 def save_log(_session):
@@ -112,6 +118,10 @@ if __name__ == "__main__":
         payload = get_payload(historical_info)
         payload_str = get_payload_str(payload)
         # print(payload_str)
+
+        if payload.get("date") == get_today_date():
+            notify(True, f"今日已打卡：{payload_str}")
+            sys.exit()
 
         time.sleep(5)
         response = save(session, payload)
