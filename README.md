@@ -9,7 +9,7 @@
    - USERNAME: 学号
    - PASSWORD: UIS密码
    - PUSH_KEY[可选]: Server酱SCKEY，用于推送通知，详见[http://sc.ftqq.com/](http://sc.ftqq.com/)，建议开启，可以通过微信接收打卡状态。
-3. 修改[work.yml](./.github/workflow/work.yml)中的`schedule`为你喜欢的打卡时间(UTC)。真正运行会有延迟，我的情况是在延迟3分钟以内，但是 [@jiangzhouwang](https://github.com/jiangzhouwang) 同学反映延迟有15分钟，请配合Server酱通知使用。
+3. 修改[work.yml](./.github/workflow/work.yml)中的`schedule`为你喜欢的打卡时间(UTC)。GitHub Actions运行会有15分钟以内的延迟，请配合Server酱通知使用。
 4. 开启 Workflow  
    在 Actions 页面：
    - 开启 Workflows
