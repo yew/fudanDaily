@@ -66,12 +66,17 @@ def get_payload(_historical_info):
         "ismoved": 0,
         "number": _historical_info["uinfo"]["role"]["number"],
         "realname": _historical_info["uinfo"]["realname"],
-        "area": _historical_info["oldInfo"]["area"],
-        "city": _historical_info["oldInfo"]["city"],
-        "province": _historical_info["oldInfo"]["province"],
         "sfhbtl": 0,
         "sfjcgrq": 0
     })
+
+    if not _payload["area"]:
+        _payload.update({
+            "area": _historical_info["oldInfo"]["area"],
+            "city": _historical_info["oldInfo"]["city"],
+            "province": _historical_info["oldInfo"]["province"]
+        })
+
     return _payload
 
 
