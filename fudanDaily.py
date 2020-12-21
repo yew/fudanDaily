@@ -90,19 +90,10 @@ def save(_session, _payload):
     return _session.post(save_url, data=_payload)
 
 
-def notify(_status, _message):
+def notify(_title, _message):
     if not PUSH_KEY:
         return
-
-    _d = {
-        "desp": _message
-    }
-    if _status:
-        _d["text"] = "打卡成功"
-    else:
-        _d["text"] = "打卡失败，请手动打卡"
-
-    requests.post(f"https://sc.ftqq.com/{PUSH_KEY}.send", data=_d)
+    requests.post(f"https://sc.ftqq.com/{PUSH_KEY}.send", {"text": _title, "desp": _message})
 
 
 if __name__ == "__main__":
@@ -125,16 +116,16 @@ if __name__ == "__main__":
         # print(payload_str)
 
         if payload.get("date") == get_today_date():
-            notify(True, f"今日已打卡：{payload_str}")
+            notify(f"今日已打卡：{payload.get('area')}", f"今日已打卡：{payload_str}")
             sys.exit()
 
         time.sleep(5)
         response = save(session, payload)
 
         if response.status_code == 200 and response.text == '{"e":0,"m":"操作成功","d":{}}':
-            notify(True, payload_str)
+            notify(f"打卡成功：{payload.get('area')}", payload_str)
         else:
-            notify(False, response.text)
+            notify("打卡失败，请手动打卡", response.text)
 
     except Exception as e:
-        notify(False, str(e))
+        notify("打卡失败，请手动打卡", str(e))
