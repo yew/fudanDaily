@@ -90,15 +90,28 @@ def save(_session, _payload):
     return _session.post(save_url, data=_payload)
 
 
-def notify(_title, _message):
+def notify(_title, _message=None):
     if not PUSH_KEY:
+        print("未配置PUSH_KEY！")
         return
-    requests.post(f"https://sc.ftqq.com/{PUSH_KEY}.send", {"text": _title, "desp": _message})
+
+    if not _message:
+        _message = _title
+
+    print(_title)
+    print(_message)
+
+    _response = requests.post(f"https://sc.ftqq.com/{PUSH_KEY}.send", {"text": _title, "desp": _message})
+
+    if _response.status_code == 200:
+        print(f"发送通知状态：{_response.content.decode('utf-8')}")
+    else:
+        print(f"发送通知失败：{_response.status_code}")
 
 
 if __name__ == "__main__":
     if not USERNAME or not PASSWORD:
-        notify(False, "请正确配置用户名和密码！")
+        notify("请正确配置用户名和密码！")
         sys.exit()
 
     login_info = {
